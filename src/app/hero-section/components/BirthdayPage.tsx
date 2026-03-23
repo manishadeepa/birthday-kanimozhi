@@ -14,41 +14,75 @@ const BirthdayPage = () => {
 
   useEffect(() => {
     setMounted(true);
-    // Load Google Fonts
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap';
     link.rel = 'stylesheet';
     document.head?.appendChild(link);
+
+    // Fix scroll on mount
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'linear-gradient(180deg, #0F172A 0%, #0D1B2A 40%, #0F172A 100%)',
+        }}
+      />
+    );
+  }
 
   return (
     <div
-      className="min-h-screen"
-      style={{ background: 'linear-gradient(180deg, #0F172A 0%, #0D1B2A 40%, #0F172A 100%)' }}
+      style={{
+        background: 'linear-gradient(180deg, #0F172A 0%, #0D1B2A 40%, #0F172A 100%)',
+        overflowX: 'hidden',
+        overflowY: 'visible',
+        position: 'relative',
+      }}
     >
       {/* ─── HERO SECTION ─── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 py-20">
+      <section
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '5rem 1.5rem',
+        }}
+      >
         {/* Ambient background glow */}
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
             background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,158,11,0.12) 0%, transparent 70%)',
             animation: 'warm-glow-bg 4s ease-in-out infinite',
           }}
         />
 
-        {/* Floating particles */}
         <FloatingParticles />
 
-        {/* Stars background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {Array.from({ length: 60 })?.map((_, i) => (
+        {/* Stars */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          {Array.from({ length: 60 }).map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full bg-amber-200"
               style={{
+                position: 'absolute',
+                borderRadius: '50%',
+                backgroundColor: '#FDE68A',
                 width: `${1 + Math.random() * 2}px`,
                 height: `${1 + Math.random() * 2}px`,
                 left: `${Math.random() * 100}%`,
@@ -61,18 +95,21 @@ const BirthdayPage = () => {
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
-          {/* Pre-title */}
+        <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', maxWidth: '56rem', margin: '0 auto' }}>
           <p
-            className="font-sans text-amber-400/80 text-sm md:text-base tracking-[0.3em] uppercase mb-6"
-            style={{ letterSpacing: '0.3em' }}
+            style={{
+              color: 'rgba(251,191,36,0.8)',
+              fontSize: '0.875rem',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+              marginBottom: '1.5rem',
+              fontFamily: 'sans-serif',
+            }}
           >
             ✨ Today is your day ✨
           </p>
 
-          {/* Name */}
           <h1
-            className="font-cursive mb-4"
             style={{
               fontFamily: "'Dancing Script', cursive",
               fontSize: 'clamp(4rem, 12vw, 9rem)',
@@ -83,188 +120,218 @@ const BirthdayPage = () => {
               backgroundClip: 'text',
               animation: 'text-glow 2.5s ease-in-out infinite',
               filter: 'drop-shadow(0 0 30px rgba(245,158,11,0.4))',
+              marginBottom: '1rem',
             }}
           >
             {FRIEND_NAME}
           </h1>
 
-          {/* Tagline */}
           <p
-            className="font-serif text-xl md:text-2xl lg:text-3xl text-amber-100/90 mb-4 italic"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(1.25rem, 3vw, 1.875rem)',
+              color: 'rgba(255,251,235,0.9)',
+              fontStyle: 'italic',
+              marginBottom: '1rem',
+            }}
           >
             "Today the world is brighter because you're in it."
           </p>
 
-          {/* Subtitle */}
-          <p className="font-sans text-amber-400/70 text-base md:text-lg mt-2">
+          <p style={{ color: 'rgba(251,191,36,0.7)', fontSize: '1.125rem', marginTop: '0.5rem', fontFamily: 'sans-serif' }}>
             🎂 Happy Birthday, my dearest friend 🎂
           </p>
 
-          {/* Candle effect */}
           <CandleEffect />
 
-          {/* Scroll hint */}
-          <div className="mt-16 flex flex-col items-center gap-2 animate-bounce">
-            <p className="text-amber-400/50 text-xs font-sans tracking-widest uppercase">Scroll to explore</p>
-            <div className="w-px h-8 bg-gradient-to-b from-amber-400/50 to-transparent" />
+          <div
+            style={{
+              marginTop: '4rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              animation: 'bounce 1s infinite',
+            }}
+          >
+            <p style={{ color: 'rgba(251,191,36,0.5)', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontFamily: 'sans-serif' }}>
+              Scroll to explore
+            </p>
+            <div
+              style={{
+                width: '1px',
+                height: '2rem',
+                background: 'linear-gradient(to bottom, rgba(251,191,36,0.5), transparent)',
+              }}
+            />
           </div>
         </div>
       </section>
+
       {/* ─── MESSAGE SECTION ─── */}
-      <section className="relative py-24 px-6 overflow-hidden">
-        {/* Section glow */}
+      <section style={{ position: 'relative', padding: '6rem 1.5rem' }}>
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
             background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(245,158,11,0.07) 0%, transparent 70%)',
           }}
         />
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          {/* Section header */}
-          <div className="text-center mb-14">
-            <span className="text-3xl mb-4 block">💌</span>
+        <div style={{ maxWidth: '56rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ fontSize: '1.875rem', display: 'block', marginBottom: '1rem' }}>💌</span>
             <h2
-              className="font-cursive text-4xl md:text-5xl mb-3"
               style={{
                 fontFamily: "'Dancing Script', cursive",
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
                 background: 'linear-gradient(135deg, #F59E0B, #FCD34D)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                marginBottom: '0.75rem',
               }}
             >
               A Letter From My Heart
             </h2>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto" />
+            <div style={{ width: '6rem', height: '1px', background: 'linear-gradient(to right, transparent, rgba(251,191,36,0.6), transparent)', margin: '0 auto' }} />
           </div>
 
-          {/* Letter card */}
           <div
-            className="relative p-8 md:p-12 rounded-3xl border border-amber-500/20"
             style={{
+              position: 'relative',
+              padding: '3rem',
+              borderRadius: '1.5rem',
+              border: '1px solid rgba(245,158,11,0.2)',
               background: 'rgba(30, 41, 59, 0.5)',
               backdropFilter: 'blur(12px)',
               boxShadow: '0 0 60px rgba(245,158,11,0.08), inset 0 1px 0 rgba(245,158,11,0.1)',
             }}
           >
-            {/* Decorative quote marks */}
             <div
-              className="absolute top-6 left-8 text-6xl text-amber-400/20 font-serif leading-none select-none"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{
+                position: 'absolute', top: '1.5rem', left: '2rem',
+                fontSize: '3.75rem', color: 'rgba(251,191,36,0.2)',
+                fontFamily: "'Playfair Display', serif", lineHeight: 1, userSelect: 'none',
+              }}
             >
               "
             </div>
             <div
-              className="absolute bottom-6 right-8 text-6xl text-amber-400/20 font-serif leading-none select-none rotate-180"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{
+                position: 'absolute', bottom: '1.5rem', right: '2rem',
+                fontSize: '3.75rem', color: 'rgba(251,191,36,0.2)',
+                fontFamily: "'Playfair Display', serif", lineHeight: 1,
+                userSelect: 'none', transform: 'rotate(180deg)',
+              }}
             >
               "
             </div>
 
-            <div className="relative z-10 pt-4">
+            <div style={{ position: 'relative', zIndex: 10, paddingTop: '1rem' }}>
               <TypewriterMessage />
             </div>
 
-            {/* Signature */}
-            <div className="mt-8 text-right">
-              <p
-                className="font-cursive text-2xl text-amber-400/80"
-                style={{ fontFamily: "'Dancing Script', cursive" }}
-              >
+            <div style={{ marginTop: '2rem', textAlign: 'right' }}>
+              <p style={{ fontFamily: "'Dancing Script', cursive", fontSize: '1.5rem', color: 'rgba(251,191,36,0.8)' }}>
                 — With all my love 💛
               </p>
             </div>
           </div>
         </div>
       </section>
+
       {/* ─── LOVE CARDS SECTION ─── */}
-      <section className="relative py-24 px-6 overflow-hidden">
+      <section style={{ position: 'relative', padding: '6rem 1.5rem' }}>
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(251,146,60,0.06) 0%, transparent 70%)',
           }}
         />
 
-        <div className="max-w-5xl mx-auto relative z-10">
-          {/* Section header */}
-          <div className="text-center mb-14">
-            <span className="text-3xl mb-4 block">🌟</span>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ fontSize: '1.875rem', display: 'block', marginBottom: '1rem' }}>🌟</span>
             <h2
-              className="font-cursive text-4xl md:text-5xl mb-3"
               style={{
                 fontFamily: "'Dancing Script', cursive",
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
                 background: 'linear-gradient(135deg, #F59E0B, #FCD34D)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                marginBottom: '0.75rem',
               }}
             >
               Things I Love About You
             </h2>
-            <p className="text-amber-100/50 font-sans text-sm mt-2">Hover to feel the warmth ✨</p>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto mt-4" />
+            <p style={{ color: 'rgba(255,251,235,0.5)', fontSize: '0.875rem', marginTop: '0.5rem', fontFamily: 'sans-serif' }}>
+              Hover to feel the warmth ✨
+            </p>
+            <div style={{ width: '6rem', height: '1px', background: 'linear-gradient(to right, transparent, rgba(251,191,36,0.6), transparent)', margin: '1rem auto 0' }} />
           </div>
 
           <LoveCardsGrid />
         </div>
       </section>
+
       {/* ─── BIRTHDAY CAKE SECTION ─── */}
-      <section className="relative py-24 px-6 overflow-hidden">
+      <section style={{ position: 'relative', padding: '6rem 1.5rem' }}>
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(245,158,11,0.1) 0%, transparent 70%)',
           }}
         />
 
-        <div className="max-w-3xl mx-auto relative z-10">
-          {/* Section header */}
-          <div className="text-center mb-14">
-            <span className="text-3xl mb-4 block">🎂</span>
+        <div style={{ maxWidth: '48rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ fontSize: '1.875rem', display: 'block', marginBottom: '1rem' }}>🎂</span>
             <h2
-              className="font-cursive text-4xl md:text-5xl mb-3"
               style={{
                 fontFamily: "'Dancing Script', cursive",
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
                 background: 'linear-gradient(135deg, #F59E0B, #FCD34D)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                marginBottom: '0.75rem',
               }}
             >
               Make a Wish
             </h2>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto" />
+            <div style={{ width: '6rem', height: '1px', background: 'linear-gradient(to right, transparent, rgba(251,191,36,0.6), transparent)', margin: '0 auto' }} />
           </div>
 
           <BirthdayCake />
         </div>
       </section>
+
       {/* ─── CLOSING OUTRO ─── */}
       <section
-        className="relative py-32 px-6 overflow-hidden"
         style={{
+          position: 'relative',
+          padding: '8rem 1.5rem',
           background: 'linear-gradient(180deg, #0F172A 0%, #0D1520 50%, #0F172A 100%)',
         }}
       >
-        {/* Large ambient glow */}
         <div
-          className="absolute inset-0 pointer-events-none"
           style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(245,158,11,0.15) 0%, rgba(251,146,60,0.08) 40%, transparent 70%)',
             animation: 'warm-glow-bg 4s ease-in-out infinite',
           }}
         />
 
-        {/* Decorative stars */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {Array.from({ length: 30 })?.map((_, i) => (
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          {Array.from({ length: 30 }).map((_, i) => (
             <div
               key={i}
-              className="absolute text-amber-300"
               style={{
+                position: 'absolute',
+                color: '#FCD34D',
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 fontSize: `${8 + Math.random() * 16}px`,
@@ -277,17 +344,14 @@ const BirthdayPage = () => {
           ))}
         </div>
 
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-          {/* Decorative line */}
-          <div className="flex items-center justify-center gap-4 mb-12">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-amber-400/40" />
-            <span className="text-amber-400 text-2xl">✦</span>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-amber-400/40" />
+        <div style={{ maxWidth: '56rem', margin: '0 auto', position: 'relative', zIndex: 10, textAlign: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '3rem' }}>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(251,191,36,0.4))' }} />
+            <span style={{ color: '#F59E0B', fontSize: '1.5rem' }}>✦</span>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(251,191,36,0.4))' }} />
           </div>
 
-          {/* Main closing message */}
           <h2
-            className="font-cursive mb-6"
             style={{
               fontFamily: "'Dancing Script', cursive",
               fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
@@ -298,30 +362,44 @@ const BirthdayPage = () => {
               backgroundClip: 'text',
               animation: 'text-glow 2.5s ease-in-out infinite',
               filter: 'drop-shadow(0 0 20px rgba(245,158,11,0.3))',
+              marginBottom: '1.5rem',
             }}
           >
             Happy Birthday, {FRIEND_NAME} 🎂
           </h2>
 
           <p
-            className="font-serif text-xl md:text-2xl text-amber-100/80 italic mb-8"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+              color: 'rgba(255,251,235,0.8)',
+              fontStyle: 'italic',
+              marginBottom: '2rem',
+            }}
           >
             — With all my love —
           </p>
 
-          <p className="font-sans text-amber-100/60 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-12">
+          <p
+            style={{
+              fontFamily: 'sans-serif',
+              color: 'rgba(255,251,235,0.6)',
+              fontSize: '1.125rem',
+              maxWidth: '42rem',
+              margin: '0 auto 3rem',
+              lineHeight: 1.8,
+            }}
+          >
             May this year bring you everything your heart desires. May you be surrounded by warmth, laughter, and all the people who love you. You deserve every beautiful thing life has to offer.
           </p>
 
-          {/* Emoji row */}
-          <div className="flex items-center justify-center gap-4 text-3xl mb-12">
-            {['🌟', '🎂', '💛', '✨', '🎉', '💛', '✨', '🎂', '🌟']?.map((e, i) => (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', fontSize: '1.875rem', marginBottom: '3rem' }}>
+            {['🌟', '🎂', '💛', '✨', '🎉', '💛', '✨', '🎂', '🌟'].map((e, i) => (
               <span
                 key={i}
                 style={{
-                  animation: `float-stars ${2 + i * 0.2}s ease-in-out ${i * 0.15}s infinite`,
                   display: 'inline-block',
+                  animation: `float-stars ${2 + i * 0.2}s ease-in-out ${i * 0.15}s infinite`,
                 }}
               >
                 {e}
@@ -329,11 +407,10 @@ const BirthdayPage = () => {
             ))}
           </div>
 
-          {/* Bottom decorative line */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-amber-400/40" />
-            <span className="text-amber-400 text-2xl">✦</span>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-amber-400/40" />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(251,191,36,0.4))' }} />
+            <span style={{ color: '#F59E0B', fontSize: '1.5rem' }}>✦</span>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(251,191,36,0.4))' }} />
           </div>
         </div>
       </section>
